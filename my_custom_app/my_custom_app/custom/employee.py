@@ -3,29 +3,27 @@ from frappe.utils import nowdate
 from frappe.utils.pdf import get_pdf
 
 def before_save(doc, method=None):
-    """Auto-manage lifecycle based on joining, probation, and exit"""
+    
     today = nowdate()
 
-    # --- Auto Confirm ---
+  
     if doc.custom_probation_date and not doc.custom_exit_date:
         if doc.custom_probation_date <= today:
             doc.custom_lifecycle_status = "Confirmed"
             doc.status = "Active"
 
-    # --- Auto Exit ---
     if doc.custom_exit_date:
         if doc.custom_exit_date <= today:
             doc.custom_lifecycle_status = "Exited"
             doc.status = "Left"
 
-    # --- Default Joining ---
+   
     if not doc.custom_lifecycle_status:
         doc.custom_lifecycle_status = "Joining"
         doc.status = "Active"
 
 
 def after_save(doc, method=None):
-    """Auto-generate Experience Letter (PDF) when employee exits"""
     if doc.custom_lifecycle_status == "Exited" or doc.status == "Left":
         try:
             print_format_name = "Standard"
