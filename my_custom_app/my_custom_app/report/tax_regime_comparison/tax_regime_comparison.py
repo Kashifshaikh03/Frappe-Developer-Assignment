@@ -14,7 +14,6 @@ def execute(filters=None):
 
     data = []
 
-    # Step 1: Get active employees only
     employees = frappe.get_all(
         "Employee",
         filters={"status": "Active"},
@@ -22,21 +21,17 @@ def execute(filters=None):
     )
 
     for emp in employees:
-        # Step 2: Check if the employee has Salary Structure Assignment
         assigned_structures = frappe.get_all(
             "Salary Structure Assignment",
             filters={"employee": emp.name, "docstatus": 1},
             fields=["salary_structure"]
         )
 
-        # Skip if employee has no structure assigned
         if not assigned_structures:
             continue
 
-        # Extract salary structure names
         structures = [s.salary_structure for s in assigned_structures]
 
-        # Process only if either Old or New Regime Structure assigned
         if "Old Regime Structure" in structures or "New Regime Structure" in structures:
             old_tax = calculate_tax(emp.name, "Old Regime Structure")
             new_tax = calculate_tax(emp.name, "New Regime Structure")
