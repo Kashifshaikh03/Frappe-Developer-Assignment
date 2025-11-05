@@ -39,6 +39,7 @@ app_license = "mit"
 # webform_include_js = {"doctype": "public/js/doctype.js"}
 # webform_include_css = {"doctype": "public/css/doctype.css"}
 
+
 # include js in page
 # page_js = {"page" : "public/js/file.js"}
 
@@ -145,6 +146,17 @@ app_license = "mit"
 # 	}
 # }
 
+doc_events = {
+    "Employee": {
+        "before_save": "my_custom_app.my_custom_app.custom.employee.before_save",
+        "after_save": "my_custom_app.my_custom_app.custom.employee.after_save"
+    },
+    "Payroll Entry": {
+        "before_submit": "my_custom_app.my_custom_app.custom.payroll.set_salary_structure_based_on_regime"
+    }
+}
+
+
 # Scheduled Tasks
 # ---------------
 
@@ -242,3 +254,41 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+    {
+        "doctype": "Property Setter",
+        "filters": [
+            ["name", "in", [
+
+            "Salary Slip-rounded_total-hidden",
+            "Salary Slip-rounded_total-print_hide",
+            "Employee-naming_series-hidden",
+            "Employee-naming_series-reqd",
+            "Employee-employee_number-reqd",
+            "Employee-employee_number-hidden",
+            "Job Applicant-main-field_order",
+            "Employee-main-default_print_format",
+            "Salary Slip-main-default_print_format",
+            "Employee-main-field_order",
+            "Salary Slip-main-field_order"
+            ]]
+        ]
+    },
+    {
+        "doctype": "Print Format",
+        "filters": [
+            ["name", "in", 
+            "Experience Letter",
+            "Salary slip Format"
+            ]
+        ]
+    },
+    {
+        "doctype": "Workflow",
+        "filters": [
+            ["name", "in", 
+            "Recruitment Workflow"
+            ]
+        ]
+    }
+]
