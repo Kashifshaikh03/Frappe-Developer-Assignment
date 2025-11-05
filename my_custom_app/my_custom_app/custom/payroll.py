@@ -1,7 +1,7 @@
 import frappe
 
 def set_salary_structure_based_on_regime(doc, method):
-    """Automatically set salary structure and fetch investment declarations"""
+    
     for row in doc.employees:
         emp = frappe.get_doc("Employee", row.employee)
         regime = emp.custom_tax_regime_preference or "New Regime"
@@ -28,5 +28,4 @@ def set_salary_structure_based_on_regime(doc, method):
                 + (investment.other_exemptions or 0)
             )
 
-        # Store this in child table (optional but visible in DB)
         row.total_investment = total_investment
